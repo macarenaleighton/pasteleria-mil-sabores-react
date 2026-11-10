@@ -1,16 +1,72 @@
-# React + Vite
+# Pastelería Mil Sabores — Tienda online en React
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Proyecto semestral **DSY1104 Desarrollo Fullstack II** · Evaluación Parcial 2 (DuocUC) · Sección 001D · Individual · Macarena Leighton.
 
-Currently, two official plugins are available:
+Migración de la tienda HTML/CSS/JS de la EP1 (caso Forma C) a **React + Vite**, con **React Router**, **Bootstrap 5** y pruebas unitarias con **Vitest + React Testing Library**.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Requisitos
+- Node.js 20 o superior
 
-## React Compiler
+## Ejecución
+```bash
+npm install
+npm run dev          # abre http://localhost:5173
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Pruebas
+```bash
+npm test               # ejecuta las 20 pruebas una vez
+npm run test:watch     # modo observador
+npm run test:coverage  # pruebas + reporte de cobertura (carpeta coverage/)
+```
 
-## Expanding the Oxlint configuration
+## Usuarios de demostración
+| Rol | Correo | Contraseña |
+|---|---|---|
+| Administrador | macarena@duoc.cl | admin123 |
+| Vendedor | javier.munoz@gmail.com | vende123 |
+| Cliente | camila.torres@gmail.com | cliente1 |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+> Los datos se guardan en `localStorage`. Para reiniciar la demo: DevTools → Application → Local Storage → borrar las claves `msabores_*`.
+
+## Estructura
+```
+src/
+├── components/         Componentes reutilizables (Header, Footer, Layout, ProductCard, ProductGrid,
+│   │                   CampoFormulario, SelectorRegionComuna, ItemCarrito, ResumenOrden, Alerta...)
+│   └── admin/          AdminLayout, TarjetaEstadistica
+├── pages/              Vistas de la tienda (Home, Productos, Categorías, Ofertas, Carrito, Checkout,
+│   │                   CompraExitosa, CompraFallida, Login, Registro, Contacto, Blogs, Nosotros)
+│   └── admin/          Dashboard, productos, críticos, categorías, usuarios + historial,
+│                       órdenes/boleta, reportes y perfil
+├── context/            CarritoContext y SesionContext (estado global)
+├── data/               Fuente de datos simulada con CRUD (productos, categorías, usuarios, órdenes,
+│                       regiones, blogs) + funciones de reportes
+├── services/           pagos.js (pago simulado, se reemplaza por backend en EP3)
+├── utils/              validaciones.js, carrito.js, formato.js (lógica pura)
+├── styles/app.css      Estilos propios que complementan Bootstrap
+└── __tests__/          20 pruebas unitarias (Vitest + RTL)
+```
+
+## Rutas
+| Ruta | Vista |
+|---|---|
+| `/` | Home |
+| `/productos`, `/productos/:codigo` | Catálogo con filtros y detalle |
+| `/categorias?c=...` | Productos por categoría |
+| `/ofertas` | Productos con descuento |
+| `/carrito` → `/checkout` | Carrito y pago |
+| `/compra-exitosa/:id`, `/compra-fallida` | Resultado de la compra |
+| `/login`, `/registro`, `/contacto`, `/nosotros`, `/blogs` | Vistas informativas y formularios |
+| `/admin` | Dashboard con indicadores y accesos rápidos |
+| `/admin/ordenes`, `/admin/ordenes/:id` | Órdenes y boleta |
+| `/admin/productos` (+ `/nuevo`, `/:codigo`, `/:codigo/editar`) | CRUD de productos y detalle |
+| `/admin/productos/criticos` | Productos con stock crítico |
+| `/admin/categorias` (+ `/nueva`, `/:id/editar`) | CRUD de categorías (solo Administrador) |
+| `/admin/usuarios` (+ `/nuevo`, `/:run`, `/:run/editar`) | CRUD de usuarios e historial de compras (solo Administrador) |
+| `/admin/reportes` | Reportes de ventas |
+| `/admin/perfil` | Perfil del usuario conectado |
+
+El panel exige sesión de **Administrador** o **Vendedor**; el Vendedor no ve Categorías ni Usuarios.
+
+En el checkout, la casilla **"Modo demostración: simular pago rechazado"** permite mostrar el flujo de pago fallido.
